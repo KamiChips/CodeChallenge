@@ -2,6 +2,7 @@ package mx.edu.cetys.software_quality_lab.users;
 
 import mx.edu.cetys.software_quality_lab.users.exceptions.DuplicateUsernameException;
 import mx.edu.cetys.software_quality_lab.users.exceptions.InvalidUserDataException;
+import mx.edu.cetys.software_quality_lab.users.exceptions.UserNotFoundException;
 import mx.edu.cetys.software_quality_lab.validators.EmailValidatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,11 +96,16 @@ public class UserService {
     /**
      * Buscar un usuario por ID.
      * Lanzar UserNotFoundException (HTTP 404) si el usuario no existe.
+     * Mayrin
      */
     UserController.UserResponse getUserById(Long id) {
         log.info("Buscando usuario por ID, id={}", id);
         // TODO: buscar por id con findById, lanzar UserNotFoundException si está vacío, mapear y regresar
-        throw new UnsupportedOperationException("TODO: implementar getUserById");
+        var userID =  userRepository.findById(id);
+        if (userID.isEmpty()) {
+            throw new UserNotFoundException("Usuario no encontrado con id=" + id);
+        }
+        return mapToResponse(userID.get());
     }
 
     /**
@@ -110,11 +116,34 @@ public class UserService {
     UserController.UserResponse suspendUser(Long id) {
         log.info("Suspendiendo usuario, id={}", id);
         // TODO: buscar usuario, validar status, cambiar a SUSPENDED, guardar, mapear y regresar
-        throw new UnsupportedOperationException("TODO: implementar suspendUser");
+
+        var userFromDb = userRepository.findById(id);
+        if (userFromDb.isEmpty()){
+            throw new
+                    UserNotFoundException("Usuario con id " + id + "no encontrado");
+        }
+        var user = userFromDb.get();
+        if (user.getStatus() == UserStatus.SUSPENDED) {
+            throw new
+                    InvalidUserDataException("El usuario ya esta suspendido");
+        }
+
+        user.setStatus(UserStatus.SUSPENDED);
+        var saved = userRepository.save(user);
+        log.info("Usuario Suspendido exitosamenre, id ={}", saved.getId());
+        return mapToResponse(saved);
     }
 
     private UserController.UserResponse mapToResponse(User user) {
-        // TODO: mapear los campos de la Entity User al record UserController.UserResponse
-        throw new UnsupportedOperationException("TODO: implementar mapToResponse");
+        return new UserController.UserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getPhone(),
+                user.getEmail(),
+                user.getAge(),
+                user.getStatus().name()
+        );
     }
 }

@@ -23,13 +23,13 @@ public class UserControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     ApiResponse<Void> handleUserNotFound(UserNotFoundException ex) {
-        throw new UnsupportedOperationException("TODO: implementar handleUserNotFound");
+        return new ApiResponse<>("Usuario no encontrado", null, ex.getMessage());
     }
 
     // TODO: regresar HTTP 409 cuando el username ya está registrado
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     ApiResponse<Void> handleDuplicateUsername(DuplicateUsernameException ex) {
-        throw new UnsupportedOperationException("TODO: implementar handleDuplicateUsername");
+        return new ApiResponse<>("Username duplicado", null, ex.getMessage());
     }
 }

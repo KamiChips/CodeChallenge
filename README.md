@@ -9,7 +9,6 @@
 | Martha Kamila Santos Maciel   | 12708     |
 | Cynthia Mayrin Peredia Parra  | 12805     |
 | Christopher Dael Sandez Curro | 13969     |
-| Angel Rogelio Camacho Romero  | 13511     |
 
 ---
 
@@ -28,6 +27,22 @@
 ### ¿Qué implementaron?
 
 <!-- Describan brevemente qué hicieron, dificultades que encontraron o decisiones que tomaron -->
+
+#### Obtener usuario por ID
+#### Archivos
+**UserService** Se implemento la logica de busqueda de un usuario por ID con 'findByID'.
+Si el resultado esta vacio lanza 'UserNotFoundException', si existe mapea la entidad a un 'UserResponse' y lo devulve.
+**UserController** Se implemento el endpoint 'GET /user/{id}' que recibe el ID como '@PathVariable', llama al servicio y envuelve el resultado en un 'APIResponse'.
+**UserControllerAdvice** Se implemento el manejo de 'UserNotFoundException' y regresa un HTTP 404 con el mensaje de error dento de 'APIRespnse'.
+
+#### Tests
+**UserServiceTest**
+- shouldGetUserByIdSuccessfully(): Mockea 'findById' con un usuario valido y verifica que el response tenga los camposcorrectos.
+- shouldThrowWhenUserNotFound(): Mockea 'findById' retornando 'Optional.empty()' y verifica que se lance 'UserNotFoundException'.
+
+**UserControllerIntegrationTest**
+- shouldReturn200AndUserWhenFound(): Guarda un usuario en H2 y verifica que 'GET /users/{id}' regrese 200 con los datos correctos.
+- shouldReturn404WhenUserNotFound(): Llama a 'GET /users/{id}' y verifica que regrese 404.
 
 ### Cobertura obtenida
 

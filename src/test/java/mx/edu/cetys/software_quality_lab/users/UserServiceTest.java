@@ -63,6 +63,7 @@ public class UserServiceTest {
 
         assertEquals(1L, response.id());
         assertEquals("Mayrin4_dev", response.username());
+
     }
 
     @Test
@@ -109,6 +110,7 @@ public class UserServiceTest {
         // TODO: assertThrows InvalidUserDataException
         var user = new UserController.UserRequest("MayRin@!", "Mayrin", "Peredia", "6461234567", "mayrin4#mirame.com",20);
         assertThrows(InvalidUserDataException.class, () -> userService.registerUser(user));
+
     }
 
     @Test
@@ -244,6 +246,7 @@ public class UserServiceTest {
         // TODO: assertThrows UserNotFoundException
         when(userRepository.findById(999L))
                 .thenReturn(Optional.empty());
+
         assertThrows(UserNotFoundException.class, () -> userService.getUserById(999L));
     }
 
