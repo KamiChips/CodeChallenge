@@ -16,7 +16,7 @@ public class UserControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     ApiResponse<Void> handleInvalidUserData(InvalidUserDataException ex) {
-        return new ApiResponse<>("Invalid user data", null, ex.getMessage());
+        throw new UnsupportedOperationException("TODO: implementar handleInvalidUserData");
     }
 
     // TODO: regresar HTTP 404 cuando el usuario no se encuentra en BD
