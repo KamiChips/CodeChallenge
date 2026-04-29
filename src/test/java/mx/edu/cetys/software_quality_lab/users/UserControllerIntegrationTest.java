@@ -28,6 +28,14 @@ public class UserControllerIntegrationTest {
         userRepository.deleteAll();
     }
 
+    private static final String valid_body = """
+                {"username":"abcd4",
+                "firstName":"Mayrin",
+                "lastName":"Peredia",
+                "phone":"6461234567",
+                "email":"mayrin4#hola.com",
+                "age":20 }""";
+
     // ─── POST /users ──────────────────────────────────────────────────────────
 
     @Test
@@ -55,6 +63,18 @@ public class UserControllerIntegrationTest {
         // TODO: body con username de 4 caracteres
         // TODO: realizar POST /users
         // TODO: andExpect status 400
+            String body = """
+                {"username":"ab4",
+                "firstName":"Mayrin",
+                "lastName":"Peredia",
+                "phone":"6461234567",
+                "email":"mayrin4#hola.com",
+                "age":20 }""";
+            mockMvc.perform(post("/users")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(body))
+                    .andExpect(status().isBadRequest());
+
     }
 
     @Test
@@ -62,6 +82,18 @@ public class UserControllerIntegrationTest {
         // TODO: body con age = 12 (caso límite — debe ser mayor a 12)
         // TODO: realizar POST /users
         // TODO: andExpect status 400
+        String body = """
+                {"username":"abcd4",
+                "firstName":"Mayrin",
+                "lastName":"Peredia",
+                "phone":"6461234567",
+                "email":"mayrin4#hola.com",
+                "age":12 }""";
+
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -69,6 +101,18 @@ public class UserControllerIntegrationTest {
         // TODO: body con phone = "123" (menos de 10 dígitos)
         // TODO: realizar POST /users
         // TODO: andExpect status 400
+        String body = """
+                {"username":"abcd4",
+                "firstName":"Mayrin",
+                "lastName":"Peredia",
+                "phone":"123",
+                "email":"mayrin4#hola.com",
+                "age":20 }""";
+
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -76,6 +120,19 @@ public class UserControllerIntegrationTest {
         // TODO: body con email en formato estándar "user@gmail.com" (no cumple las reglas del validador)
         // TODO: realizar POST /users
         // TODO: andExpect status 400
+
+        String body = """
+                {"username":"abcd4",
+                "firstName":"Mayrin",
+                "lastName":"Peredia",
+                "phone":"6461234567",
+                "email":"mayrin4#gmail.com",
+                "age":20 }""";
+
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(body))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -83,6 +140,13 @@ public class UserControllerIntegrationTest {
         // TODO: guardar un usuario directamente via repository con el mismo username
         // TODO: realizar segundo POST /users con el mismo username
         // TODO: andExpect status 409
+        mockMvc.perform(post("/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(valid_body))
+                .andExpect(status().isCreated());
+        mockMvc.perform(post("/users")
+                .contentType(valid_body))
+                .andExpect(status().isConflict());
     }
 
     // ─── GET /users/{id} ─────────────────────────────────────────────────────
