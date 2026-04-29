@@ -59,7 +59,7 @@ Si el resultado esta vacio lanza `UserNotFoundException`, si existe mapea la ent
 - shouldReturn200AndUserWhenFound(): Guarda un usuario en H2 y verifica que `GET /users/{id}` regrese 200 con los datos correctos.
 - shouldReturn404WhenUserNotFound(): Llama a `GET /users/{id}` y verifica que regrese 404.
 
-- #### Suspender usuario - Christopher
+#### Suspender usuario - Christopher
 
 **Archivos**
 * **UserService:** Se implementó la lógica para cambiar el estatus de un usuario a suspendido. Se incluyeron las validaciones de negocio correspondientes: si el usuario no es encontrado se lanza `UserNotFoundException`, y si el usuario ya se encuentra con estatus de `SUSPENDED`, se lanza un `InvalidUserDataException`. Si pasa las validaciones, se actualiza el estado y se persiste en la base de datos.
