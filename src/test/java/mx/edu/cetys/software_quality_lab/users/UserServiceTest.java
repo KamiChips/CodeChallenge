@@ -10,6 +10,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -42,8 +44,13 @@ public class UserServiceTest {
     @Test
     void shouldGetUserByIdSuccessfully() {
         // TODO: arrange — mockear userRepository.findById para que regrese un Optional<User> con datos
+        when(userRepository.findById(1L));
         // TODO: act — llamar a userService.getUserById(1L)
+        var response = userService.getUserById(1L);
         // TODO: assert — verificar que los campos del response coincidan con el mock
+        assertEquals(1L, response.id());
+        assertEquals("KllrMomo", response.username());
+        assertEquals("Momo", response.firstName());
     }
 
     @Test
@@ -168,8 +175,8 @@ public class UserServiceTest {
 
     @Test
     void shouldThrowWhenUserNotFound() {
-        // TODO: mockear userRepository.findById para que regrese Optional.empty()
-        // TODO: assertThrows UserNotFoundException
+        when(userRepository.findById(999L)).thenReturn(Optional.empty());
+        assertThrows(UserNotFoundException.class, () -> userService.getUserById(999L));
     }
 
     @Test

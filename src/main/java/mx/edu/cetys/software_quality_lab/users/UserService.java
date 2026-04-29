@@ -1,5 +1,6 @@
 package mx.edu.cetys.software_quality_lab.users;
 
+import mx.edu.cetys.software_quality_lab.users.exceptions.UserNotFoundException;
 import mx.edu.cetys.software_quality_lab.validators.EmailValidatorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,11 +43,16 @@ public class UserService {
     /**
      * Buscar un usuario por ID.
      * Lanzar UserNotFoundException (HTTP 404) si el usuario no existe.
+     * Mayrin
      */
     UserController.UserResponse getUserById(Long id) {
         log.info("Buscando usuario por ID, id={}", id);
         // TODO: buscar por id con findById, lanzar UserNotFoundException si está vacío, mapear y regresar
-        throw new UnsupportedOperationException("TODO: implementar getUserById");
+        var userID =  userRepository.findById(id);
+        if (userID.isEmpty()) {
+            throw new UserNotFoundException("Usuario no encontrado con id=" + id);
+        }
+        return mapToResponse(userID.get());
     }
 
     /**
