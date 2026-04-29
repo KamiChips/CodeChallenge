@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static mx.edu.cetys.software_quality_lab.users.UserStatus.SUSPENDED;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -121,6 +122,11 @@ public class UserControllerIntegrationTest {
         // TODO: realizar PATCH /users/{id}/suspend
         // TODO: andExpect status 200
         // TODO: andExpect jsonPath("$.response.user.status") == "SUSPENDED"
+
+        User saved = userRepository.save(new User("juan4_dev","Juan","Pérez","6641234567","juan4#gmail.com",25));
+        mockMvc.perform(patch("/users/" + saved.getId() +"/suspend"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.user.status").value("SUSPENDED"));
     }
 
     @Test
@@ -128,5 +134,12 @@ public class UserControllerIntegrationTest {
         // TODO: guardar un usuario con status SUSPENDED via repository
         // TODO: realizar PATCH /users/{id}/suspend
         // TODO: andExpect status 400
+        User user = new User("juan4_dev","Juan","Pérez","6641234567","juan4#gmail.com",25);
+
+    user.setStatus(UserStatus.SUSPENDED);
+
+    User saved = userRepository.save(user);
+    mockMvc.perform(patch("/users/" + saved.getId() + "/suspend"))
+            .andExpect(status().isBadRequest());
     }
 }
