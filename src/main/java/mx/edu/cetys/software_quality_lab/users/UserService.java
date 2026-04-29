@@ -83,7 +83,6 @@ public class UserService {
     }
 
     private UserController.UserResponse mapToResponse(User user) {
-        // TODO: mapear los campos de la Entity User al record UserController.UserResponse
         return new UserController.UserResponse(
                 user.getId(),
                 user.getUsername(),
