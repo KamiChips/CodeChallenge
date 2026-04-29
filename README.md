@@ -59,6 +59,20 @@ Si el resultado esta vacio lanza `UserNotFoundException`, si existe mapea la ent
 - shouldReturn200AndUserWhenFound(): Guarda un usuario en H2 y verifica que `GET /users/{id}` regrese 200 con los datos correctos.
 - shouldReturn404WhenUserNotFound(): Llama a `GET /users/{id}` y verifica que regrese 404.
 
+- #### Suspender usuario - Christopher
+
+**Archivos**
+* **UserService:** Se implementó la lógica para cambiar el estatus de un usuario a suspendido. Se incluyeron las validaciones de negocio correspondientes: si el usuario no es encontrado se lanza `UserNotFoundException`, y si el usuario ya se encuentra con estatus de `SUSPENDED`, se lanza un `InvalidUserDataException`. Si pasa las validaciones, se actualiza el estado y se persiste en la base de datos.
+* **UserController:** Se implementó el endpoint `PATCH /users/{id}/suspend` que recibe el ID del usuario mediante `@PathVariable`, ejecuta la lógica del servicio y retorna el usuario actualizado envuelto en un `ApiResponse` con un código HTTP 200.
+* **UserControllerAdvice:** Se completó la implementación del método `handleInvalidUserData`. Se eliminó la excepción temporal (`UnsupportedOperationException`) y se configuró para que retorne correctamente un HTTP 400 (Bad Request) con el mensaje de error cuando fallan las reglas de negocio.
+
+**Tests**
+* **UserServiceTest:** Se implementaron pruebas unitarias para asegurar que el servicio cambie el estado exitosamente, así como para verificar que se disparen las excepciones correctas (usuario inexistente o ya suspendido).
+* **UserControllerIntegrationTest:** Se añadieron pruebas con `MockMvc` para simular las peticiones `PATCH`. Específicamente, se comprobó que se retorne el estatus 200 en un caso de éxito y el estatus 400 (`isBadRequest()`) al intentar suspender a un usuario ya suspendido.
+
+**Dificultades**
+* Al correr las pruebas de integración, el test que verificaba la suspensión de un usuario ya suspendido fallaba. El test esperaba un código 400, pero la aplicación devolvía un 500. Al realizar el proceso de *debugging* en los logs, detecté que el servicio lanzaba la excepción correctamente, pero el manejador global (`UserControllerAdvice`) tenía un `TODO` sin implementar que hacía *crash* en la aplicación. Reemplazar ese código por el mapeo correcto del `ApiResponse` solucionó el problema.
+
 ### Cobertura obtenida
 
 | Métrica | Resultado |
