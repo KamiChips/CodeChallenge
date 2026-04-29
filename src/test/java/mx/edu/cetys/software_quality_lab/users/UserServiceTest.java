@@ -86,6 +86,9 @@ public class UserServiceTest {
     void shouldThrowWhenUsernameHasInvalidChars() {
         // TODO: username con mayúsculas o caracteres especiales, ej. "User@Name"
         // TODO: assertThrows InvalidUserDataException
+        var req = new UserController.UserRequest("User@Name1",
+                "Juan", "Perez", "6641234567", "juan4#gmail.com", 25);
+        assertThrows(InvalidUserDataException.class, () -> userService.registerUser(req));
     }
 
     @Test
