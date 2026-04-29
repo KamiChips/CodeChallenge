@@ -42,6 +42,9 @@
 
 ### ¿Qué implementaron?
 
+**Kamila**: Implementación de registro de usuario junto con las reglas que se deben de seguir 
+dentro del registro para que sea un usuario valido.
+
 <!-- Describan qué lograron del challenge, si lo completaron o hasta dónde llegaron -->
 
 ### Cobertura obtenida
