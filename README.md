@@ -9,7 +9,6 @@
 | Martha Kamila Santos Maciel   | 12708     |
 | Cynthia Mayrin Peredia Parra  | 12805     |
 | Christopher Dael Sandez Curro | 13969     |
-| Angel Rogelio Camacho Romero  | 13511     |
 
 ---
 
