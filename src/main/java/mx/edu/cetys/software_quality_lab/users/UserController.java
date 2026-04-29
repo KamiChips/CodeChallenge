@@ -40,6 +40,6 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<UserWrapper> suspendUser(@PathVariable Long id) {
         // TODO: llamar a userService.suspendUser, envolver en ApiResponse y regresar
-        throw new UnsupportedOperationException("TODO: implementar endpoint suspendUser");
+        return new ApiResponse<>("Usuario suspendido exitosamente", new UserWrapper(userService.suspendUser(id)),null);
     }
 }

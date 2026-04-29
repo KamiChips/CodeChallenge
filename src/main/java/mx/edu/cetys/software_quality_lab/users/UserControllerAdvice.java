@@ -30,6 +30,6 @@ public class UserControllerAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     ApiResponse<Void> handleDuplicateUsername(DuplicateUsernameException ex) {
-        throw new UnsupportedOperationException("TODO: implementar handleDuplicateUsername");
+        return new ApiResponse<>("Username duplicado", null, ex.getMessage());
     }
 }
