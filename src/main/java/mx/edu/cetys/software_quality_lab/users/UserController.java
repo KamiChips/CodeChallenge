@@ -22,9 +22,9 @@ public class UserController {
     // POST /users — registrar un nuevo usuario
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED) // HTTP 201: recurso creado exitosamente
-    ApiResponse<UserWrapper> registerUser(@RequestBody UserRequest request) {
+    ApiResponse<UserWrapper> registerUser(@RequestBody UserController.UserRequest request) {
         // TODO: llamar a userService.registerUser, envolver en ApiResponse y regresar
-        throw new UnsupportedOperationException("TODO: implementar endpoint registerUser");
+        return new ApiResponse<>("New user registered", new UserWrapper(userService.registerUser(request)), null);
     }
 
     // GET /users/{id} — obtener un usuario por ID
