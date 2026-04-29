@@ -28,6 +28,21 @@
 
 <!-- Describan brevemente qué hicieron, dificultades que encontraron o decisiones que tomaron -->
 
+**Kamila**
+## Archivos
+Dentro del archivo de **UserService** agregue la lógica de las reglas que se deben de seguir para que se cree un usuario valido.
+Cada regla se tomo en cuenta y se implemento, se verifico que no hiciera falta ninguna regla.
+Posteriormente dentro de **UserController** se modifico la respuesta con el envoltorio de ApiResponse.
+Dentro de **UserControllerAdvice** solo se modifico el tipo de respuesta que se entregaria en caso de una mala request.
+Por ultimo, se agregaron las pruebas unitarias y de integración, en donde se cubrieron la mayoría de las branches de coverage dentro del código,
+se implementaron pruebas para usuarios de longitud corta y larga, asi como pruebas de numero de celular si era menor a 10 numero, etc.
+
+## Dificultades
+Dentro de un momento de presion accidentalmente empece a subir archivos de gradle, build, etc., y en un intento desesperado de revertir el push 
+de todo esos archivos accidentalmente elimine todo el progreso de usuarios que habia realizado, tomando en cuenta que tambien afectaria a mi equipo, ademas 
+de que en su momento hacia falta mis pruebas de integracion. Finalmente, se pudieron recuperar los archivos, pero esta vez ya no eran trackeados por git, por
+lo que tuve que forzar la eliminacion de cache de los archivos en git y volver a subir todo.
+
 #### Obtener usuario por ID
 #### Archivos
 **UserService** Se implemento la logica de busqueda de un usuario por ID con 'findByID'.
@@ -57,8 +72,6 @@ Si el resultado esta vacio lanza 'UserNotFoundException', si existe mapea la ent
 
 ### ¿Qué implementaron?
 
-**Kamila**: Implementación de registro de usuario junto con las reglas que se deben de seguir 
-dentro del registro para que sea un usuario valido.
 
 <!-- Describan qué lograron del challenge, si lo completaron o hasta dónde llegaron -->
 
