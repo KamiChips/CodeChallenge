@@ -110,8 +110,8 @@ public class UserControllerIntegrationTest {
         // TODO: andExpect status 200
         // TODO: andExpect jsonPath("$.response.user.status") == "SUSPENDED"
 
-        User saved = userRepository.save(new User("chris_cetys","Christopher","Sandez","6461134169","dsandez@gmail.com",20));
-        mockMvc.perform(patch("/users/" + saved.getId() +"/suspend/"))
+        User saved = userRepository.save(new User("juan4_dev","Juan","Pérez","6641234567","juan4#gmail.com",25));
+        mockMvc.perform(patch("/users/" + saved.getId() +"/suspend"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.user.status").value("SUSPENDED"));
     }
@@ -121,12 +121,12 @@ public class UserControllerIntegrationTest {
         // TODO: guardar un usuario con status SUSPENDED via repository
         // TODO: realizar PATCH /users/{id}/suspend
         // TODO: andExpect status 400
-        User user = new User("chris_cetys","Christopher","Sandez","6461134169","dsandez@gmail.com",20);
+        User user = new User("juan4_dev","Juan","Pérez","6641234567","juan4#gmail.com",25);
 
     user.setStatus(UserStatus.SUSPENDED);
 
     User saved = userRepository.save(user);
-    mockMvc.perform(patch("/users/" + saved.getId() + "/suspend/"))
+    mockMvc.perform(patch("/users/" + saved.getId() + "/suspend"))
             .andExpect(status().isBadRequest());
     }
 }

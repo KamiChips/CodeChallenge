@@ -31,14 +31,14 @@ public class UserController {
     // May
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK) // HTTP 200: solicitud exitosa
-    ApiResponse<UserWrapper> getUserById(@PathVariable Long id) {
+    ApiResponse<UserWrapper> getUserById(@PathVariable("id") Long id) {
         return new ApiResponse<>("Usuario encontrado", new UserWrapper(userService.getUserById(id)), null);
     }
 
     // PATCH /users/{id}/suspend — suspender un usuario activo
     @PatchMapping("/{id}/suspend")
     @ResponseStatus(HttpStatus.OK)
-    ApiResponse<UserWrapper> suspendUser(@PathVariable Long id) {
+    ApiResponse<UserWrapper> suspendUser(@PathVariable("id") Long id) {
         // TODO: llamar a userService.suspendUser, envolver en ApiResponse y regresar
         return new ApiResponse<>("Usuario suspendido exitosamente", new UserWrapper(userService.suspendUser(id)),null);
     }
