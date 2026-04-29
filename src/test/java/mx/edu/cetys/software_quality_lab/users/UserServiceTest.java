@@ -43,14 +43,22 @@ public class UserServiceTest {
 
     @Test
     void shouldGetUserByIdSuccessfully() {
-        // TODO: arrange — mockear userRepository.findById para que regrese un Optional<User> con datos
-        when(userRepository.findById(1L));
-        // TODO: act — llamar a userService.getUserById(1L)
-        var response = userService.getUserById(1L);
-        // TODO: assert — verificar que los campos del response coincidan con el mock
+        when(userRepository.findById(1L)).thenReturn(Optional.of(userWithId(1L)));
+        UserController.UserResponse response = userService.getUserById(1L);
         assertEquals(1L, response.id());
-        assertEquals("KllrMomo", response.username());
-        assertEquals("Momo", response.firstName());
+        assertEquals("juan4_dev", response.username());
+        assertEquals("Juan", response.firstName());
+    }
+
+    // Crea un user
+    private User userWithId(Long id) {
+        User user = new User("juan4_dev",
+                "Juan",
+                "Pérez",
+                "6641234567",
+                "juan4#gmail.com", 25);
+        user.setId(id);
+        return user;
     }
 
     @Test
