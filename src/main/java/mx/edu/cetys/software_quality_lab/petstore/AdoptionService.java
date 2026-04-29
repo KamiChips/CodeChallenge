@@ -2,7 +2,14 @@ package mx.edu.cetys.software_quality_lab.petstore;
 
 import mx.edu.cetys.software_quality_lab.pets.PetRepository;
 import mx.edu.cetys.software_quality_lab.pets.exceptions.PetNotFoundException;
+import mx.edu.cetys.software_quality_lab.petstore.exceptions.AdoptionNotFoundException;
+import mx.edu.cetys.software_quality_lab.petstore.exceptions.MaxAdoptionsReachedException;
+import mx.edu.cetys.software_quality_lab.petstore.exceptions.PetAlreadyAdoptedException;
+import mx.edu.cetys.software_quality_lab.petstore.exceptions.UserNotEligibleException;
 import mx.edu.cetys.software_quality_lab.users.UserRepository;
+import mx.edu.cetys.software_quality_lab.users.UserStatus;
+import mx.edu.cetys.software_quality_lab.users.exceptions.InvalidUserDataException;
+import mx.edu.cetys.software_quality_lab.users.exceptions.UserNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,8 +39,11 @@ public class AdoptionService {
      */
     List<AdoptionController.AvailablePetResponse> listAvailablePets() {
         log.info("Obteniendo pets disponibles para adopción");
-        // TODO: llamar a petRepository.findAllByAvailableTrue(), mapear cada Pet a AvailablePetResponse
-        throw new UnsupportedOperationException("TODO: implementar listAvailablePets");
+        return petRepository.findAllByAvailableTrue()
+                .stream()
+                .map(pet -> new AdoptionController.AvailablePetResponse(
+                        pet.getId(), pet.getName(), pet.getRace(), pet.getColor(), pet.getAge()))
+                .toList();
     }
 
     /**
@@ -51,8 +61,51 @@ public class AdoptionService {
      */
     AdoptionController.AdoptionResponse createAdoption(AdoptionController.AdoptionRequest request) {
         log.info("Creando adopción, userId={}, petId={}", request.userId(), request.petId());
-        // TODO: implementar todas las reglas anteriores, persistir y mapear la respuesta
-        throw new UnsupportedOperationException("TODO: implementar createAdoption");
+
+        //Regla 1
+        var formatUser = userRepository.findById(request.userId());
+        if (formatUser.isEmpty()) {
+            //throw new UserNotFoundException("Usuario con id " + request.userId() + " no encontrado");
+        }
+
+        var user  = formatUser.get();
+
+        // Regla 2
+        if (user.getStatus() != UserStatus.ACTIVE) {
+            throw new UserNotEligibleException("Usuario con id " + request.userId() + " no encontrado");
+        }
+
+        // Regla 3
+        if (user.getAge() < 18) {
+            throw new UserNotEligibleException("El usario debe de tener al menos 18 años para adoptar");
+        }
+
+        // Regla 4
+        var formPet = petRepository.findById(request.petId());
+        if (formPet.isEmpty()) {
+            throw new PetNotFoundException("Pet " + request.petId() + " no encontrado");
+        }
+
+        var pet = formPet.get();
+
+        // Regla 5
+        if (adoptionRepository.existsByPetIdAndStatus(pet.getId(), AdoptionStatus.ACTIVE)) {
+            throw new PetAlreadyAdoptedException("El pet con id " + request.petId() + " ya se encuentra en adopcion activa");
+        }
+
+        // Regla 6
+        if (adoptionRepository.countByUserIdAndStatus(user.getId(), AdoptionStatus.ACTIVE) >=3) {
+            throw new MaxAdoptionsReachedException("El usuario ya tiene 3 adopciones activas");
+        }
+
+        // Marcar pet no disponible y guardar
+        pet.setAvailable(false);
+        petRepository.save(pet);
+
+        var saved = adoptionRepository.save( new Adoption(user, pet));
+        log.info("Adopcion creada existosamente, id{}", saved.getId());
+        return mapToResponse(saved);
+
     }
 
     /**
@@ -66,12 +119,36 @@ public class AdoptionService {
      */
     AdoptionController.AdoptionResponse cancelAdoption(Long adoptionId) {
         log.info("Cancelando adopción, adoptionId={}", adoptionId);
-        // TODO: implementar las reglas anteriores, persistir los cambios y mapear la respuesta
-        throw new UnsupportedOperationException("TODO: implementar cancelAdoption");
+
+        // Regla 1
+        var formAdoption = adoptionRepository.findById(adoptionId);
+        if (formAdoption.isEmpty()) {
+            throw new AdoptionNotFoundException("Adoption " + adoptionId + " no encontrado");
+        }
+
+        var adoption = formAdoption.get();
+
+        // Regla 2
+        if (adoption.getStatus() == AdoptionStatus.CANCELLED) {
+            //throw new InvalidUserDataException("La adopción ya está cancelada");
+        }
+
+        adoption.setStatus(AdoptionStatus.CANCELLED);
+        adoption.getPet().setAvailable(true);
+        petRepository.save(adoption.getPet());
+
+        var saved = adoptionRepository.save(adoption);
+        log.info("Adopcion cancelada existosamente, id{}", saved.getId());
+        return mapToResponse(saved);
     }
 
     private AdoptionController.AdoptionResponse mapToResponse(Adoption adoption) {
-        // TODO: mapear los campos de la Entity Adoption al record AdoptionController.AdoptionResponse
-        throw new UnsupportedOperationException("TODO: implementar mapToResponse");
+        return  new AdoptionController.AdoptionResponse(
+                adoption.getId(),
+                adoption.getUser().getId(),
+                adoption.getPet().getId(),
+                adoption.getStatus().name(),
+                adoption.getAdoptionDate().toString()
+        );
     }
 }

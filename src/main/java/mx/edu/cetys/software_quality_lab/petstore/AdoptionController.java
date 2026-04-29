@@ -28,23 +28,23 @@ public class AdoptionController {
     @GetMapping("/pets")
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<List<AvailablePetResponse>> listAvailablePets() {
-        // TODO: llamar a adoptionService.listAvailablePets, envolver en ApiResponse y regresar
-        throw new UnsupportedOperationException("TODO: implementar endpoint listAvailablePets");
+        var pets = adoptionService.listAvailablePets();
+        return new ApiResponse<>("Pets disponibles: " + pets.size(), pets, null);
     }
 
     // POST /petstore/adoptions — crear una nueva adopción
     @PostMapping("/adoptions")
     @ResponseStatus(HttpStatus.CREATED)
     ApiResponse<AdoptionWrapper> createAdoption(@RequestBody AdoptionRequest request) {
-        // TODO: llamar a adoptionService.createAdoption, envolver en ApiResponse y regresar
-        throw new UnsupportedOperationException("TODO: implementar endpoint createAdoption");
+        return new ApiResponse<>("Adopcion creada exitosamente",
+                new AdoptionWrapper(adoptionService.createAdoption(request)), null);
     }
 
     // PATCH /petstore/adoptions/{id}/cancel — cancelar una adopción activa
     @PatchMapping("/adoptions/{id}/cancel")
     @ResponseStatus(HttpStatus.OK)
     ApiResponse<AdoptionWrapper> cancelAdoption(@PathVariable Long id) {
-        // TODO: llamar a adoptionService.cancelAdoption, envolver en ApiResponse y regresar
-        throw new UnsupportedOperationException("TODO: implementar endpoint cancelAdoption");
+        return new ApiResponse<>("Adopción cancelada exitosamente",
+                new AdoptionWrapper(adoptionService.cancelAdoption(id)), null);
     }
 }
