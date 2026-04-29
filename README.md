@@ -2,23 +2,23 @@
 
 ## Equipo
 
-**Nombre del equipo:** <!-- Nombre de su equipo -->
+**Nombre del equipo:** Parangaricutirimicuaro
 
-| Nombre completo | Matrícula |
-|---|---|
-| Estudiante 1 | 000000 |
-| Estudiante 2 | 000000 |
-| Estudiante 3 | 000000 |
+| Nombre completo               | Matrícula |
+|-------------------------------|-----------|
+| Martha Kamila Santos Maciel   | 12708     |
+| Cynthia Mayrin Peredia Parra  | 12805     |
+| Christopher Dael Sandez Curro | 13969     |
 
 ---
 
 ## Entrega
 
-**Fecha:** <!-- Fecha de entrega -->
+**Fecha:** <!-- Fecha de entrega --> 28/04/2026
 
-**Modalidad:** <!-- ZIP / GitHub -->
+**Modalidad:** <!-- ZIP / GitHub --> Presencial
 
-**Link del repositorio (si aplica):** <!-- https://github.com/... -->
+**Link del repositorio (si aplica):** <!-- https://github.com/... --> https://github.com/KamiChips/CodeChallenge.git
 
 ---
 
