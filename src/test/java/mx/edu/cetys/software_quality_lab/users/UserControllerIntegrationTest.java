@@ -88,16 +88,29 @@ public class UserControllerIntegrationTest {
 
     @Test
     void shouldReturn200AndUserWhenFound() throws Exception {
-        // TODO: guardar un usuario via repository, obtener su id generado
-        // TODO: realizar GET /users/{id}
-        // TODO: andExpect status 200
-        // TODO: andExpect jsonPath campos coincidan con el usuario guardado
+        User saved = userRepository.save( new User("juan4_dev",
+                "Juan",
+                "Pérez",
+                "6641234567",
+                "juan4#gmail.com", 25)
+        );
+
+        mockMvc.perform(get("/users/" + saved.getId()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.user.username").value("juan4_dev"));
     }
 
     @Test
     void shouldReturn404WhenUserNotFound() throws Exception {
-        // TODO: realizar GET /users/9999 (id inexistente)
-        // TODO: andExpect status 404
+        User saved = userRepository.save( new User("juan4_dev",
+                "Juan",
+                "Pérez",
+                "6641234567",
+                "juan4#gmail.com", 25)
+        );
+
+        mockMvc.perform(get("/user/9999"))
+                .andExpect(status().isNotFound());
     }
 
     // ─── PATCH /users/{id}/suspend ────────────────────────────────────────────
