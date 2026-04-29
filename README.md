@@ -43,21 +43,21 @@ de todo esos archivos accidentalmente elimine todo el progreso de usuarios que h
 de que en su momento hacia falta mis pruebas de integracion. Finalmente, se pudieron recuperar los archivos, pero esta vez ya no eran trackeados por git, por
 lo que tuve que forzar la eliminacion de cache de los archivos en git y volver a subir todo.
 
-#### Obtener usuario por ID
+#### Obtener usuario por ID - Mayrin
 #### Archivos
-**UserService** Se implemento la logica de busqueda de un usuario por ID con 'findByID'.
-Si el resultado esta vacio lanza 'UserNotFoundException', si existe mapea la entidad a un 'UserResponse' y lo devulve.
-**UserController** Se implemento el endpoint 'GET /user/{id}' que recibe el ID como '@PathVariable', llama al servicio y envuelve el resultado en un 'APIResponse'.
-**UserControllerAdvice** Se implemento el manejo de 'UserNotFoundException' y regresa un HTTP 404 con el mensaje de error dento de 'APIRespnse'.
+**UserService** Se implemento la logica de busqueda de un usuario por ID con `findByID`'.
+Si el resultado esta vacio lanza `UserNotFoundException`, si existe mapea la entidad a un `UserResponse` y lo devulve.
+**UserController** Se implemento el endpoint `GET /user/{id}` que recibe el ID como `@PathVariable`, llama al servicio y envuelve el resultado en un 'APIResponse'.
+**UserControllerAdvice** Se implemento el manejo de 'UserNotFoundException' y regresa un HTTP 404 con el mensaje de error dento de `APIRespnse`.
 
 #### Tests
 **UserServiceTest**
-- shouldGetUserByIdSuccessfully(): Mockea 'findById' con un usuario valido y verifica que el response tenga los camposcorrectos.
-- shouldThrowWhenUserNotFound(): Mockea 'findById' retornando 'Optional.empty()' y verifica que se lance 'UserNotFoundException'.
+- shouldGetUserByIdSuccessfully(): Mockea `findById` con un usuario valido y verifica que el response tenga los camposcorrectos.
+- shouldThrowWhenUserNotFound(): Mockea `findById`retornando `Optional.empty()` y verifica que se lance `UserNotFoundException`.
 
 **UserControllerIntegrationTest**
-- shouldReturn200AndUserWhenFound(): Guarda un usuario en H2 y verifica que 'GET /users/{id}' regrese 200 con los datos correctos.
-- shouldReturn404WhenUserNotFound(): Llama a 'GET /users/{id}' y verifica que regrese 404.
+- shouldReturn200AndUserWhenFound(): Guarda un usuario en H2 y verifica que `GET /users/{id}` regrese 200 con los datos correctos.
+- shouldReturn404WhenUserNotFound(): Llama a `GET /users/{id}` y verifica que regrese 404.
 
 ### Cobertura obtenida
 
@@ -71,6 +71,14 @@ Si el resultado esta vacio lanza 'UserNotFoundException', si existe mapea la ent
 ## Challenge Extra — Módulo `petstore`
 
 ### ¿Qué implementaron?
+#### Mayrin
+
+#### Archivos
+**createAdoption** Valida 6 reglas antes de persistir
+En caso de éxito marca 'pet.available = false' y guarda la adopción.
+**cancelAdoption** Valida 2 reglas
+En caso de éxito cambia el status a `CANCELLED` y devuelve `pet.available = true`.
+**listAvailablePets** Consulta todos los pets con `available = true` y los regresa como lista.
 
 
 <!-- Describan qué lograron del challenge, si lo completaron o hasta dónde llegaron -->
